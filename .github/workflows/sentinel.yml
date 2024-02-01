@@ -47,7 +47,7 @@ jobs:
             git config user.email "notifications@github.com"
             git add -A
             git commit -m "Automated Terraform Formatting"
-            git push -u origin ${{ steps.branch.outputs.branch }}`
+            git push -u origin ${{ steps.branch.outputs.branch }}
           } ||
           {
             echo "ERROR    | Unable to push file(s) to the repository.""
