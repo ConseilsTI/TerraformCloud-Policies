@@ -34,14 +34,37 @@ jobs:
 
       - name: 'Sentinel Format'
         id: fmt 
-        uses: benyboy84/GitHubAction_sentinel-fmt@v1.5.1
+        uses: ConseilsTI/GitHubAction-SentinelFormat@v1.0.1
         with:
           check: true
 
       - name: Git Push
         if: ${{ steps.fmt.outputs.exitcode == 2 }}
         run: |
-          echo "Not properly formated"
+          echo "INFO     | Pushing file(s) to the repository."  
+          {  
+            git config user.name "GitHub Action"
+            git config user.email "notifications@github.com"
+            git add -A
+            git commit -m "Automated Terraform Formatting"
+            git push -u origin ${{ steps.branch.outputs.branch }}`
+          } ||
+          {
+            echo "ERROR    | Unable to push file(s) to the repository.""
+          }
+          echo "INFO     | Adding comment to pull request."
+          accept_header="Accept: application/vnd.github.v3+json"
+          auth_header="Authorization: token ${GITHUB_TOKEN}"
+          content_header="Content-Type: application/json"
+          pr_comments_url=$(jq -r ".pull_request.comments_url" "${GITHUB_EVENT_PATH}")
+          body=":warning: New files have been pushed to the repository, you need to update your local copy of the repository."
+          pr_payload=$(echo '{}' | jq --arg body "${body}" '.body = $body')
+          {
+              curl -sS -X POST -H "${auth_header}" -H "${accept_header}" -H "${content_header}" -d "${pr_payload}" -L "${pr_comments_url}" > /dev/null
+          } ||
+          {
+              echo "ERROR    | Unable to add comment to pull request."
+          }
 
       # - name: 'Sentinel Test'
       #   uses: benyboy84/GitHubAction_sentinel@main
