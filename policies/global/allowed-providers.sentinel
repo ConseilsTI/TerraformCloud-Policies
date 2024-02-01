@@ -24,27 +24,27 @@ allowed_list = ["aws", "azurerm", "azuread", "tfe", "hcp", "github", "terraform"
 ### find_all_resources ###
 # Find all resources of all types using the tfconfig/v2 import.
 find_all_resources = func() {
-  resources = filter tfconfig.resources as address, r {
-  	r.mode is "managed"
-  }
+	resources = filter tfconfig.resources as address, r {
+		r.mode is "managed"
+	}
 
-  return resources
+	return resources
 }
 
 ### find_all_datasources ###
 # Find all data sources of all types using the tfconfig/v2 import.
 find_all_datasources = func() {
-  datasources = filter tfconfig.resources as address, d {
-  	d.mode is "data"
-  }
+	datasources = filter tfconfig.resources as address, d {
+		d.mode is "data"
+	}
 
-  return datasources
+	return datasources
 }
 
 ### find_all_providers ###
 # Find all providers using the tfconfig/v2 import.
 find_all_providers = func() {
-  return tfconfig.providers
+	return tfconfig.providers
 }
 
 ### evaluate_attribute ###
@@ -54,28 +54,28 @@ find_all_providers = func() {
 # `item` is the item with the attribute
 # `attribute` is the attribute
 evaluate_attribute = func(item, attribute) {
-  # Split the attribute into a list, using "." as the separator
-  attributes = strings.split(attribute, ".")
-  if length(attributes) > 2 {
-    print("An attribute passed to evaluate_attribute can only have 1 or 2 fields")
-    return null
-  }
-  if attributes[0] is "config" {
-    config = item.config[attributes[1]] else {}
-    if "constant_value" in config {
-      # Found constant_value in config
-      return config.constant_value
-    } else if "references" in config {
-      # Found references in config
-      return config.references
-    } else {
-      # Did not find constant_value or references in config
-      return null
-    }
-  } else {
-    # Return the original attribute or the item
-    return item[attribute]
-  }
+	# Split the attribute into a list, using "." as the separator
+	attributes = strings.split(attribute, ".")
+	if length(attributes) > 2 {
+		print("An attribute passed to evaluate_attribute can only have 1 or 2 fields")
+		return null
+	}
+	if attributes[0] is "config" {
+		config = item.config[attributes[1]] else {}
+		if "constant_value" in config {
+			# Found constant_value in config
+			return config.constant_value
+		} else if "references" in config {
+			# Found references in config
+			return config.references
+		} else {
+			# Did not find constant_value or references in config
+			return null
+		}
+	} else {
+		# Return the original attribute or the item
+		return item[attribute]
+	}
 }
 
 ### to_string ###
@@ -83,43 +83,43 @@ evaluate_attribute = func(item, attribute) {
 # It is used to build messages added to the messages map returned by the
 # filter functions
 to_string = func(obj) {
-  case types.type_of(obj) {
-    when "string":
-      return obj
-    when "int", "float", "bool":
-      return string(obj)
-    when "null":
-      return "null"
-    when "undefined":
-      return "undefined"
-    when "list":
-      output = "["
-      lastIndex = length(obj) - 1
-      for obj as index, value {
-        if index < lastIndex {
-          output += to_string(value) + ", "
-        } else {
-          output += to_string(value)
-        }
-      }
-      output += "]"
-      return output
-    when "map":
-      output = "{"
-      theKeys = keys(obj)
-      lastIndex = length(theKeys) - 1
-      for theKeys as index, key {
-        if index < lastIndex {
-          output += to_string(key) + ": " + to_string(obj[key]) + ", "
-        } else {
-          output += to_string(key) + ": " + to_string(obj[key])
-        }
-      }
-      output += "}"
-      return output
-    else:
-      return ""
-  }
+	case types.type_of(obj) {
+		when "string":
+			return obj
+		when "int", "float", "bool":
+			return string(obj)
+		when "null":
+			return "null"
+		when "undefined":
+			return "undefined"
+		when "list":
+			output = "["
+			lastIndex = length(obj) - 1
+			for obj as index, value {
+				if index < lastIndex {
+					output += to_string(value) + ", "
+				} else {
+					output += to_string(value)
+				}
+			}
+			output += "]"
+			return output
+		when "map":
+			output = "{"
+			theKeys = keys(obj)
+			lastIndex = length(theKeys) - 1
+			for theKeys as index, key {
+				if index < lastIndex {
+					output += to_string(key) + ": " + to_string(obj[key]) + ", "
+				} else {
+					output += to_string(key) + ": " + to_string(obj[key])
+				}
+			}
+			output += "}"
+			return output
+		else:
+			return ""
+	}
 }
 
 ### filter_attribute_not_in_list ###
@@ -129,53 +129,55 @@ to_string = func(obj) {
 # Set prtmsg to `true` (without quotes) if you want to print violation messages.
 # If you want to disallow null, include "null" in the list (forbidden).
 filter_attribute_not_in_list = func(items, attr, allowed, prtmsg) {
-  violators = {}
-  messages = {}
+	violators = {}
+	messages = {}
 
-  # Iterate over items
-  for items as index, item {
-    val = evaluate_attribute(item, attr) else null
-    # Check if the value is null
-    if val is null {
-      val = "null"
-    }
-    # Process lists and maps
-    if types.type_of(val) in ["list", "map"] {
-      message = ""
-      # Check each item of list or map
-      for val as i, v {
-        if v not in allowed {
-          # Add the item and a warning message to the violators list
-          message = to_string(index) + " has " + to_string(attr) + " with value " +
-                    to_string(v) + " that is not in the allowed list: " +
-                    to_string(allowed)
-        }
-        if message is not "" {
-          # Add the item and warning message to the violators list
-          violators[index] = item
-      		messages[index] = message
-          if prtmsg {
-            print(message)
-          }
-        } // end message not ""
-      } // end for
-    } else {
-      # Process single item
-      if val not in allowed {
-        # Add the item and a warning message to the violators list
-        message = to_string(index) + " has " + to_string(attr) +
-                  " with value " + to_string(val) +
-                  " that is not in the allowed list: " +
-                  to_string(allowed)
-        violators[index] = item
-        messages[index] = message
-        if prtmsg {
-          print(message)
-        }
-      } // end if single item not matches
-    } // end single item
-  } // end for items
-  return {"items":violators,"messages":messages}
+	# Iterate over items
+	for items as index, item {
+		val = evaluate_attribute(item, attr) else null
+		# Check if the value is null
+		if val is null {
+			val = "null"
+		}
+		# Process lists and maps
+		if types.type_of(val) in ["list", "map"] {
+			message = ""
+			# Check each item of list or map
+			for val as i, v {
+				if v not in allowed {
+					# Add the item and a warning message to the violators list
+					message = to_string(index) + " has " + to_string(attr) + " with value " +
+						to_string(v) +
+						" that is not in the allowed list: " +
+						to_string(allowed)
+				}
+				if message is not "" {
+					# Add the item and warning message to the violators list
+					violators[index] = item
+					messages[index] = message
+					if prtmsg {
+						print(message)
+					}
+				} // end message not ""
+			} // end for
+		} else {
+			# Process single item
+			if val not in allowed {
+				# Add the item and a warning message to the violators list
+				message = to_string(index) + " has " + to_string(attr) +
+					" with value " +
+					to_string(val) +
+					" that is not in the allowed list: " +
+					to_string(allowed)
+				violators[index] = item
+				messages[index] = message
+				if prtmsg {
+					print(message)
+				}
+			} // end if single item not matches
+		} // end single item
+	} // end for items
+	return {"items": violators, "messages": messages}
 }
 
 ### print_violations ###
@@ -187,10 +189,10 @@ filter_attribute_not_in_list = func(items, attr, allowed, prtmsg) {
 # then you should pass violatingIRs["message"] as the first argument.
 # The prefix argument is printed before the message of each resource.
 print_violations = func(messages, prefix) {
-  for messages as address, message {
-    print(prefix, message)
-  }
-  return true
+	for messages as address, message {
+		print(prefix, message)
+	}
+	return true
 }
 
 # Get all providers
@@ -199,12 +201,12 @@ allProviders = find_all_providers()
 # Filter to providers with violations
 # Warnings will not be printed for violations since the last parameter is false
 violatingProviders = filter_attribute_not_in_list(allProviders,
-                     "name", allowed_list, false)
+	"name", allowed_list, false)
 
 # Print any violations
 prohibitedProvidersCount = length(violatingProviders["messages"])
 if prohibitedProvidersCount > 0 {
-  print_violations(violatingProviders["messages"], "Provider")
+	print_violations(violatingProviders["messages"], "Provider")
 }
 
 # Initialize resource and data source counts
@@ -216,41 +218,40 @@ allResources = find_all_resources()
 
 # Filter to disallowed resources
 prohibitedResources = filter allResources as address, r {
-  strings.split(r.type, "_")[0] not in allowed_list
+	strings.split(r.type, "_")[0] not in allowed_list
 }
 
 # Print violations and increment counts for resources
 if length(prohibitedResources) > 0 {
-  print("Resources from providers are not allowed unless they are in", allowed_list)
-  prohibitedResourcesCount += length(prohibitedResources)
-  for prohibitedResources as address, r {
-    print("Resource", address, "from provider", strings.split(r.type, "_")[0],
-          "is not allowed.")
-  } // end for prohibitedResources
+	print("Resources from providers are not allowed unless they are in", allowed_list)
+	prohibitedResourcesCount += length(prohibitedResources)
+	for prohibitedResources as address, r {
+		print("Resource", address, "from provider", strings.split(r.type, "_")[0],
+			"is not allowed.")
+	} // end for prohibitedResources
 } // end if
-
 
 # Find all data sources
 allDataSources = find_all_datasources()
 
 # Filter to disallowed data sources
 prohibitedDataSources = filter allDataSources as address, r {
-  strings.split(r.type, "_")[0] not in allowed_list
+	strings.split(r.type, "_")[0] not in allowed_list
 }
 
 # Print violations and increment counts for data sources
 if length(prohibitedDataSources) > 0 {
-  print("Data sources from providers are not allowed unless they are in", allowed_list)
-  prohibitedDataSourcesCount += length(prohibitedDataSources)
-  for prohibitedDataSources as address, r {
-    print("Data source", address, "from provider", strings.split(r.type, "_")[0],
-          "is not allowed.")
-  } // end for prohibitedDataSources
+	print("Data sources from providers are not allowed unless they are in", allowed_list)
+	prohibitedDataSourcesCount += length(prohibitedDataSources)
+	for prohibitedDataSources as address, r {
+		print("Data source", address, "from provider", strings.split(r.type, "_")[0],
+			"is not allowed.")
+	} // end for prohibitedDataSources
 } // end if
 
 # Main rule
 violations = prohibitedProvidersCount + prohibitedResourcesCount +
-             prohibitedDataSourcesCount
+	prohibitedDataSourcesCount
 main = rule {
-  violations is 0
+	violations is 0
 }
