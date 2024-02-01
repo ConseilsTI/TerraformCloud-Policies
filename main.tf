@@ -58,7 +58,7 @@ locals {
     for line in local.description_lines : 
     replace(line, "#", "")
   ]
-  description = join(updated_description_lines, " ")
+  description = join(local.updated_description_lines, " ")
 }
 
 output "raw_lines" {
