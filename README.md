@@ -36,13 +36,9 @@ The following outputs are exported:
 
 ### <a name="output_description"></a> [description](#output\_description)
 
-Description: n/a
+Description: The description of the Sentinel policy file.
 
-### <a name="output_description_lines"></a> [description\_lines](#output\_description\_lines)
-
-Description: n/a
-
-### <a name="output_first_blank_line"></a> [first\_blank\_line](#output\_first\_blank\_line)
+### <a name="output_index"></a> [index](#output\_index)
 
 Description: n/a
 
