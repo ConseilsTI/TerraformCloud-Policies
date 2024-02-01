@@ -1,4 +1,4 @@
-# Terraform Cloud Foundation
+# Terraform Cloud Policies
 
 Code which manages configuration and life-cycle of all the Terraform Cloud
 Policies. It is designed to be used from a dedicated VCS-Driven Terraform
