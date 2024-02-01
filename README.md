@@ -13,7 +13,13 @@ The following requirements are needed by this module:
 
 ## Modules
 
-No modules.
+The following Modules are called:
+
+### <a name="module_description"></a> [description](#module\_description)
+
+Source: ./modules/get_description
+
+Version:
 
 ## Required Inputs
 
@@ -32,19 +38,7 @@ The following resources are used by this module:
 
 ## Outputs
 
-The following outputs are exported:
-
-### <a name="output_description"></a> [description](#output\_description)
-
-Description: The description of the Sentinel policy file.
-
-### <a name="output_index"></a> [index](#output\_index)
-
-Description: n/a
-
-### <a name="output_raw_lines"></a> [raw\_lines](#output\_raw\_lines)
-
-Description: n/a
+No outputs.
 
 <!-- markdownlint-disable first-line-h1 -->
 ------
