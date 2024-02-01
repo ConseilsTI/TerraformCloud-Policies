@@ -32,7 +32,11 @@ The following resources are used by this module:
 
 ## Outputs
 
-No outputs.
+The following outputs are exported:
+
+### <a name="output_description"></a> [description](#output\_description)
+
+Description: n/a
 
 <!-- markdownlint-disable first-line-h1 -->
 ------
