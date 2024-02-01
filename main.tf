@@ -1,3 +1,8 @@
+locals {
+  # This local is used to define the organization name.
+  organization_name = "ConseilsTI"
+}
+
 # -----------------------------------------------------------------------------
 # The following code block is used to create Terraform Cloud Policies.
 # -----------------------------------------------------------------------------
@@ -22,7 +27,7 @@ resource "tfe_policy" "this" {
   for_each = local.files
   name     = element(split(".", element(split("/", each.key), 1)), 2)
   # description  = ""
-  organization = data.tfe_organization.this.name
+  organization = local.organization_name
   kind         = "sentinel"
   policy       = file("${local.policies_folder}/${each.key}")
   enforce_mode = "advisory" # advisory, hard-mandatory and soft-mandatory
@@ -31,11 +36,6 @@ resource "tfe_policy" "this" {
 # -----------------------------------------------------------------------------
 # The following code block is used to create Terraform Cloud Policy Sets.
 # -----------------------------------------------------------------------------
-
-locals {
-  # This local is used to define the organization name.
-  organization_name = "ConseilsTI"
-}
 
 resource "tfe_policy_set" "global" {
   name         = "Global-Policy-Set"
