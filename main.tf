@@ -50,7 +50,7 @@ resource "tfe_policy_set" "global" {
 locals {
   raw_lines = [
     for line in split("\n", file("./policies/global/allowed-providers.sentinel")) :
-    line
+    line if startswith("#", line)
     #trimspace(line) if startswith("#", line)
   ]
 }
