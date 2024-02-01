@@ -38,6 +38,10 @@ The following outputs are exported:
 
 Description: n/a
 
+### <a name="output_description_lines"></a> [description\_lines](#output\_description\_lines)
+
+Description: n/a
+
 ### <a name="output_first_blank_line"></a> [first\_blank\_line](#output\_first\_blank\_line)
 
 Description: n/a
