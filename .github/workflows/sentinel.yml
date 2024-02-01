@@ -51,7 +51,20 @@ jobs:
             git push -u origin ${{ steps.branch.outputs.branch }}
           } ||
           {
-            echo "ERROR    | Unable to push file(s) to the repository.""
+            echo "ERROR    | Unable to push file(s) to the repository."
+          }
+          echo "INFO     | Adding comment to pull request."
+          accept_header="Accept: application/vnd.github.v3+json"
+          auth_header="Authorization: token ${GITHUB_TOKEN}"
+          content_header="Content-Type: application/json"
+          pr_comments_url=$(jq -r ".pull_request.comments_url" "${GITHUB_EVENT_PATH}")
+          body=":warning: New files have been pushed to the repository, you need to update your local copy of the repository."
+          pr_payload=$(echo '{}' | jq --arg body "${body}" '.body = $body')
+          {
+              curl -sS -X POST -H "${auth_header}" -H "${accept_header}" -H "${content_header}" -d "${pr_payload}" -L "${pr_comments_url}" > /dev/null
+          } ||
+          {
+              echo "ERROR    | Unable to add comment to pull request."
           }
 
       # - name: 'Sentinel Test'
