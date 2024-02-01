@@ -56,7 +56,7 @@ locals {
   description = concat(slice(local.raw_lines, 0, local.first_blank_line))
 }
 
-output "description" {
+output "raw_lines" {
   value = local.raw_lines
 }
 
