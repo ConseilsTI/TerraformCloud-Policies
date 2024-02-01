@@ -26,7 +26,7 @@ locals {
 module "description" {
   for_each = local.files
   source   = "./modules/get_description"
-  path     = each.value
+  path     = "${local.policies_folder}/${each.key}"
 }
 
 resource "tfe_policy" "this" {
