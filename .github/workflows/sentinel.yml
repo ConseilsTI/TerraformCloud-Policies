@@ -7,9 +7,9 @@ on:  # yamllint disable-line rule:truthy
       - '*/*'                    # matches every branch containing a single '/'
       - '**'                     # matches every branch
     paths:
-      # - '**.tf'
-      # - '**.hcl'
-      # - '**.sentinel'
+      - '**.tf'
+      - '**.hcl'
+      - '**.sentinel'
 
 permissions:
   contents: write
@@ -34,7 +34,7 @@ jobs:
 
       - name: 'Sentinel Format'
         id: fmt 
-        uses: benyboy84/GitHubAction_sentinel-fmt@v1.5.0
+        uses: benyboy84/GitHubAction_sentinel-fmt@v1.5.1
         with:
           check: true
 
