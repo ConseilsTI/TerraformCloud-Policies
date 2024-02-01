@@ -53,7 +53,12 @@ locals {
     line
   ]
   first_blank_line = index(local.raw_lines, "")
-  description = concat(slice(local.raw_lines, 0, local.first_blank_line))
+  description_lines = slice(local.raw_lines, 0, local.first_blank_line)
+  updated_description_lines = [
+    for line in local.description_lines : 
+    replace(line, "#", "")
+  ]
+  description = join(updated_description_lines, " ")
 }
 
 output "raw_lines" {
@@ -62,6 +67,10 @@ output "raw_lines" {
 
 output "first_blank_line" {
   value = local.first_blank_line
+}
+
+output "description_lines" {
+  value = local.description_lines
 }
 
 output "description" {
