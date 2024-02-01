@@ -50,11 +50,15 @@ resource "tfe_policy_set" "global" {
 locals {
   raw_lines = [
     for line in split("\n", file("./policies/global/allowed-providers.sentinel")) :
-    line if startswith(line, "#")
-    #trimspace(line) if startswith("#", line)
+    line
   ]
+  first_blank_line = index(local.raw_lines, "")
 }
 
 output "description" {
   value = local.raw_lines
+}
+
+output "first_blank_line" {
+  value = local.first_blank_line
 }
