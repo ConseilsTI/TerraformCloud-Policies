@@ -56,7 +56,7 @@ locals {
   description_lines = slice(local.raw_lines, 0, local.first_blank_line)
   updated_description_lines = [
     for line in local.description_lines : 
-    replace(line, "#", "")
+    trimspace(replace(line, "#", ""))
   ]
   description = join( " ", local.updated_description_lines)
 }
