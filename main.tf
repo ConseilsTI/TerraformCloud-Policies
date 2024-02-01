@@ -45,3 +45,15 @@ resource "tfe_policy_set" "global" {
   kind         = "sentinel"
   policy_ids   = [for value in tfe_policy.this : value.id]
 }
+
+
+locals {
+  raw_lines = [
+    for line in split("\n", file("./policies/global/allowed-providers.sentinel")) :
+    trimspace(line) if startswith("#", line)
+  ]
+}
+
+output "description" {
+  value = local.raw_lines
+}
