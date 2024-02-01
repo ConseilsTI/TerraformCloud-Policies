@@ -53,6 +53,7 @@ locals {
     line
   ]
   first_blank_line = index(local.raw_lines, "")
+  description = concat(slice(local.raw_lines, 0, local.first_blank_line))
 }
 
 output "description" {
@@ -61,4 +62,8 @@ output "description" {
 
 output "first_blank_line" {
   value = local.first_blank_line
+}
+
+output "description" {
+  value = local.description
 }
