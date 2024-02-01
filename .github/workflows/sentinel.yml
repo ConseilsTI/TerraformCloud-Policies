@@ -34,7 +34,7 @@ jobs:
 
       - name: 'Sentinel Format'
         id: fmt 
-        uses: benyboy84/GitHubAction_sentinel-fmt@v1.5.0
+        uses: benyboy84/GitHubAction_sentinel-fmt@v1.5.1
         with:
           check: true
 
