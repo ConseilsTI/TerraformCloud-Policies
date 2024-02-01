@@ -33,7 +33,7 @@ jobs:
           ref: ${{ steps.branch.outputs.branch }}
 
       - name: 'Sentinel Format'
-        id: fmt 
+        id: fmt
         uses: ConseilsTI/GitHubAction-SentinelFormat@v1.0.1
         with:
           check: false
@@ -42,8 +42,8 @@ jobs:
       - name: Git Push
         if: ${{ steps.fmt.outputs.exitcode == 2 }}
         run: |
-          echo "INFO     | Pushing file(s) to the repository."  
-          {  
+          echo "INFO     | Pushing file(s) to the repository."
+          {
             git config user.name "GitHub Action"
             git config user.email "notifications@github.com"
             git add -A
@@ -67,10 +67,10 @@ jobs:
               echo "ERROR    | Unable to add comment to pull request."
           }
 
-      # - name: 'Sentinel Test'
-      #   uses: benyboy84/GitHubAction_sentinel@main
-      #   with:
-      #     version: latest
-      #     command: test
-      #     working_dir: "./policies/global"
-      #     comment: true
+      - name: 'Sentinel Test'
+        uses: hashicorp/sentinel-github-actions@master
+        with:
+          stl_actions_version: latest
+          stl_actions_subcommand: 'test'
+          stl_actions_working_dir: ./policies/global
+          stl_actions_comment: true
