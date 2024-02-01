@@ -50,7 +50,7 @@ locals {
 
   # Read file content to get all lines.
   raw_lines = [
-    for line in split("\n", file("./policies/glocal/allowed-providers.sentinel")) :
+    for line in split("\n", file("./policies/global/allowed-providers.sentinel")) :
     line if startswidth(line, "#") || startswidth(line, "")
   ]
 
