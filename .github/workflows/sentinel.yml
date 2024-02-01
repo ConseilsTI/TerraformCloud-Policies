@@ -1,3 +1,14 @@
+# This workflow runs on `pull_request`.
+#
+# `Sentinel` job uses `checkout` to download the content of the repository.
+# It uses the GitHub Action `GitHubAction-SentinelFormat` to run `sentinel fmt`. If change are made to the code, the code is push
+# to the branch.
+#
+# Documentation
+# - https://github.com/actions/checkout
+# - https://github.com/ConseilsTI/GitHubAction-SentinelFormat
+#
+
 name: Sentinel
 
 on:  # yamllint disable-line rule:truthy
@@ -58,7 +69,7 @@ jobs:
           auth_header="Authorization: token ${GITHUB_TOKEN}"
           content_header="Content-Type: application/json"
           pr_comments_url=$(jq -r ".pull_request.comments_url" "${GITHUB_EVENT_PATH}")
-          body="New files have been pushed to the repository.<br/>You need to update your local copy of the repository."
+          body="New files have been pushed to the repository.<br/> you need to update your local copy of the repository."
           pr_payload=$(echo '{}' | jq --arg body "${body}" '.body = $body')
           {
               curl -sS -X POST -H "${auth_header}" -H "${accept_header}" -H "${content_header}" -d "${pr_payload}" -L "${pr_comments_url}" > /dev/null
