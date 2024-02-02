@@ -17,7 +17,7 @@ resource "tfe_policy" "this" {
   for_each     = local.files
   name         = element(split(".", element(split("/", each.key), 1)), 2)
   description  = module.description[each.value].description
-  organization = local.organization_name
+  organization = var.organization_name
   kind         = "sentinel"
   policy       = file("${var.policies_folder}/${each.key}")
   enforce_mode = "advisory" # advisory, hard-mandatory and soft-mandatory
@@ -30,7 +30,7 @@ resource "tfe_policy" "this" {
 resource "tfe_policy_set" "global" {
   name         = "Global-Policy-Set"
   description  = "This policy-set is assigned at the organization level."
-  organization = local.organization_name
+  organization = var.organization_name
   global       = true
   kind         = "sentinel"
   policy_ids   = [for value in tfe_policy.this : value.id]
