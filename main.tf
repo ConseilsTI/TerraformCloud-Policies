@@ -1,26 +1,10 @@
-locals {
-  # This local is used to define the organization name.
-  organization_name = "ConseilsTI"
-}
-
 # -----------------------------------------------------------------------------
 # The following code block is used to create Terraform Cloud Policies.
 # -----------------------------------------------------------------------------
 
 locals {
-  # This local is used to define the folder where all the policies are located.
-  # The folder structure should be like this:
-  # policies
-  # |_ global
-  #    <policy name>.sentinel
-  #   |_ test
-  #     |_ <policy_name>
-  #        <test name>.hcl
-  #        <mock name>.sentinel
-  policies_folder = "policies"
-
   # This local is used to get a list of all folder inside the policies folder.
-  files = fileset(local.policies_folder, "*/*.sentinel")
+  files = fileset(var.policies_folder, "*/*.sentinel")
 }
 
 module "description" {

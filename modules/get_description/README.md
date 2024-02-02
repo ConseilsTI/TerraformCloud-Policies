@@ -4,7 +4,7 @@ The `Get description` module is used to get the description of a sentinel policy
 The description must be located at the top of the file. The description concist of
 every commented line from the first line until a blank line.
 
-## Features
+## Actions
 
 * Read the entire policy file.
 * Get the commented and blank line(s).
@@ -30,7 +30,7 @@ The following input variables are required:
 
 ### <a name="input_path"></a> [path](#input\_path)
 
-Description: The path of the Sentinel policy file that you want to get the description.
+Description: The relative path of the Sentinel policy file that you want to get the description.
 
 Type: `string`
 
