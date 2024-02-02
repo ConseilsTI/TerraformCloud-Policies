@@ -1,5 +1,5 @@
 <!-- BEGIN_TF_DOCS -->
-# Terraform Cloud Foundation
+# Terraform Cloud Policies
 
 Code which manages configuration and life-cycle of all the Terraform Cloud
 Policies. It is designed to be used from a dedicated VCS-Driven Terraform
@@ -49,11 +49,25 @@ Version:
 
 ## Required Inputs
 
-No required inputs.
+The following input variables are required:
+
+### <a name="input_organization_name"></a> [organization\_name](#input\_organization\_name)
+
+Description: The name of the Terraform Cloud organization.
+
+Type: `string`
 
 ## Optional Inputs
 
-No optional inputs.
+The following input variables are optional (have default values):
+
+### <a name="input_policies_folder"></a> [policies\_folder](#input\_policies\_folder)
+
+Description: The name of the folder where policies are located.
+
+Type: `string`
+
+Default: `"./policies"`
 
 ## Resources
 
