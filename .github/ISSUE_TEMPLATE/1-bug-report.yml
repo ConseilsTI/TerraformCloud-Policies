@@ -32,13 +32,13 @@ body:
     id: version
     attributes:
       label: Version
-      description: With which version of the code is the problem is?
+      description: With which version of the Terraform module is the problem is?
     validations:
       required: true
   - type: markdown
     attributes:
       value: |
-        *If you are not using the latest available version of the code, please validate if the problem exists with this version.*
+        *If you are not using the latest available version of the Terraform module, please validate if the problem exists with this version.*
   - type: input
     id: runner
     attributes:
