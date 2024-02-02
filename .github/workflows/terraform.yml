@@ -46,14 +46,14 @@ jobs:
 
       - name: Terraform Format
         id: fmt
-        uses: ConseilsTI/GitHubAction-TerraformFormat@v1.0.1
+        uses: ConseilsTI/GitHubAction-TerraformFormat@v1.0.0
         with:
           check: false
           recursive: true
           comment: true
 
       - name: Git Push
-        if: ${{ steps.fmt.outputs.exitcode == 2 }}
+        if: ${{ steps.fmt.outputs.exitcode == 3 }}
         run: |
           echo "INFO     | Pushing file(s) to the repository."
           {
@@ -71,7 +71,7 @@ jobs:
           auth_header="Authorization: token ${GITHUB_TOKEN}"
           content_header="Content-Type: application/json"
           pr_comments_url=$(jq -r ".pull_request.comments_url" "${GITHUB_EVENT_PATH}")
-          body="New files have been pushed to the repository.<br/>You need to update your local copy of the repository."
+          body="Terraform file(s) has been formatted and pushed to the repository.<br/>You need to update your local copy of the repository."
           pr_payload=$(echo '{}' | jq --arg body "${body}" '.body = $body')
           {
               curl -sS -X POST -H "${auth_header}" -H "${accept_header}" -H "${content_header}" -d "${pr_payload}" -L "${pr_comments_url}" > /dev/null
