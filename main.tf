@@ -10,7 +10,7 @@ locals {
 module "description" {
   for_each = local.files
   source   = "./modules/get_description"
-  path     = "${local.policies_folder}/${each.key}"
+  path     = "${var.policies_folder}/${each.key}"
 }
 
 resource "tfe_policy" "this" {
@@ -19,7 +19,7 @@ resource "tfe_policy" "this" {
   description  = module.description[each.value].description
   organization = local.organization_name
   kind         = "sentinel"
-  policy       = file("${local.policies_folder}/${each.key}")
+  policy       = file("${var.policies_folder}/${each.key}")
   enforce_mode = "advisory" # advisory, hard-mandatory and soft-mandatory
 }
 
