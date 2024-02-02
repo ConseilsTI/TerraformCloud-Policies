@@ -27,6 +27,19 @@ environment variable and the token stored there to authenticate. Refer to
   * policies
   * policy sets
 
+## Test Folder Structure
+
+Sentinel is opinionated about the folder structure required for tests. This
+opinionated structure allows testing to be as simple as running sentinel
+test with no arguments. Additionally, it becomes simple to test in a CI or
+add new policies.
+
+The structure Sentinel expects is test/<policy>/*.[hcl|json] where <policy>
+is the name of your policy file without the file extension. Within that
+folder is a list of HCL or JSON files. Each file represents a single test
+case. Therefore, each policy can have multiple tests associated with it.
+Sentinel
+
 ## Documentation
 
 ## Requirements
