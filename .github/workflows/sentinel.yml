@@ -45,7 +45,7 @@ jobs:
 
       - name: 'Sentinel Format'
         id: fmt
-        uses: ConseilsTI/GitHubAction-SentinelFormat@v1.0.1
+        uses: ConseilsTI/GitHubAction-SentinelFormat@v1.0.3
         with:
           check: false
           delete_comment: false
