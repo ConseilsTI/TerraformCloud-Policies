@@ -17,7 +17,7 @@ import "strings"
 import "types"
 
 # List of allowed providers
-allowed_list = ["aws", "azurerm", "azuread", "tfe", "hcp", "github", "terraform", "local", "null", "random", "time", "tls"]
+allowed_list = ["aws", "azuread", "azurerm", "github", "hcp", "local", "null", "random", "terraform", "tfe", "time", "tls"]
 
 ##### Functions #####
 
